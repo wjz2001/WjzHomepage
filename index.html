@@ -17,6 +17,22 @@
   <script type="text/javascript" src="./js/search.js"></script>
   <script type="text/javascript" src="./js/color-thief.umd.js"></script>
   <script type="text/javascript" src="./js/rgbtohex.js"></script>
+  <script language="javascript">
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.src = './img.php';
+    window.onload = function () {
+      document.querySelector(".bgimg img").src = img.src;
+    }
+    const colorThief = new ColorThief();
+    img.addEventListener('load', function () {
+      var sRgb = "RGB(" + colorThief.getColor(img) + ")";
+      document.documentElement.style.setProperty('--background', sRgb.colorHex());
+      document
+        .querySelector('meta[name="theme-color"]')
+        .setAttribute("content", sRgb.colorHex());
+    });
+  </script>
 
   <style>
     html,
@@ -190,21 +206,7 @@
     </form>
 
     <div class="bgimg">
-      <img src="./img.php" />
-      <script language="javascript">
-        const img = document.querySelector('.bgimg img');
-        const colorThief = new ColorThief();
-        img.addEventListener('load', function () {
-          var color = colorThief.getColor(img);
-          console.log(color);
-          var sRgb = "RGB(" + color + ")";
-          var sHexColor = sRgb.colorHex();
-          document.documentElement.style.setProperty('--background', sHexColor);
-          document
-            .querySelector('meta[name="theme-color"]')
-            .setAttribute("content", sHexColor);
-        });
-      </script>
+      <img src="" crossorigin="anonymous" />
     </div>
 
     <div class="bookmarks">
