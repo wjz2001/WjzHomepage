@@ -1,6 +1,6 @@
 # 自用手机版浏览器主页
 ## 预览
-![预览图片]()
+![预览图片](https://github.com/wjz2001/WjzHomepage/blob/master/preview.jpg)
 
 ## 说明
 * 本项目为自用，仅在chrome手机版上测试成功，拥有数不清的兼容性问题。
