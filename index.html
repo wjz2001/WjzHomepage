@@ -14,24 +14,33 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta name="theme-color" content="">
 
+  <!-- <script type="text/javascript" src="./js/jquery.min.js"></script> -->
   <script type="text/javascript" src="./js/search.js"></script>
   <script type="text/javascript" src="./js/color-thief.umd.js"></script>
   <script type="text/javascript" src="./js/rgbtohex.js"></script>
   <script language="javascript">
     const img = new Image();
-    img.crossOrigin = 'Anonymous';
-    img.src = './img.php';
-    window.onload = function () {
-      document.querySelector(".bgimg img").src = img.src;
-    }
+    img.crossOrigin = "Anonymous";
+    img.src = "./img.php";
+
     const colorThief = new ColorThief();
-    img.addEventListener('load', function () {
-      var sRgb = "RGB(" + colorThief.getColor(img) + ")";
-      document.documentElement.style.setProperty('--background', sRgb.colorHex());
+
+    img.addEventListener("load", function () {
+      var imgcolor = colorThief.getPalette(img, 5);
+      var sRgb = "RGB(" + imgcolor[Math.floor(Math.random() * imgcolor.length)] + ")";
+
+      document.documentElement.style.setProperty("--background", sRgb.colorHex());
+
       document
-        .querySelector('meta[name="theme-color"]')
+        .querySelector("meta[name='theme-color']")
         .setAttribute("content", sRgb.colorHex());
+
+      document.querySelector(".bgimg img").src = img.src;
     });
+
+    window.onload = function () {
+      document.querySelector(".page").style.setProperty("animation-play-state", "running");
+    };
   </script>
 
   <style>
@@ -43,6 +52,7 @@
       padding: 0;
       overflow: hidden;
       background: var(--background);
+      transition: background 1s ease-in-out;
     }
 
     .page {
@@ -52,15 +62,10 @@
       display: flex;
       flex-direction: column;
       animation: move 0.5s ease-in-out 1;
+      animation-play-state: paused;
     }
 
     @keyframes move {
-      0% {
-        transform: translate3d(0, 100%, 0);
-      }
-    }
-
-    @-webkit-keyframes move {
       0% {
         transform: translate3d(0, 100%, 0);
       }
