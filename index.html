@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- 改两处颜色，一处图片地址 -->
 <html>
 
 <head>
@@ -12,27 +11,24 @@
   <meta content="zh-cn" http-equiv="Content-Language" />
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="theme-color" content="#FF0000">
+  <meta name="theme-color" content="#F72405">
 
   <!-- <script type="text/javascript" src="./js/jquery.min.js"></script> -->
   <script type="text/javascript" src="./js/search.js"></script>
   <script type="text/javascript" src="./js/color-thief.umd.js"></script>
   <script type="text/javascript" src="./js/rgbtohex.js"></script>
+
   <script language="javascript">
     const img = new Image();
     img.crossOrigin = "Anonymous";
     img.src = "./img.php";
-
     const colorThief = new ColorThief();
 
     img.addEventListener("load", function () {
       var imgcolor = colorThief.getPalette(img, 5);
       var sRgb = "RGB(" + imgcolor[Math.floor(Math.random() * imgcolor.length)] + ")";
-
       document.documentElement.style.setProperty("--background", sRgb.colorHex());
-
       document.querySelector("meta[name='theme-color']").setAttribute("content", sRgb.colorHex());
-
       document.querySelector(".bgimg img").src = img.src;
     });
 
@@ -56,9 +52,8 @@
 
     .loading {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      inset: 0;
+      background: url("img/loading.gif") no-repeat fixed center;
     }
 
     .page {
@@ -78,9 +73,7 @@
     }
 
     .search_bar {
-      margin-top: 20px;
       margin-bottom: 40px;
-      width: 100%;
       text-align: center;
       order: 1;
     }
@@ -92,13 +85,13 @@
       order: 0;
     }
 
-    .search_bar:focus-within~div {
+    .search_bar:focus-within ~div {
       filter: blur(5px);
-      transition: filter .3s ease-in-out;
+      transition: filter 0.3s ease-in-out;
       pointer-events: none;
     }
 
-    #search_input {
+    .search_bar input {
       line-height: 1.8em;
       width: 84%;
       border: none;
@@ -110,11 +103,10 @@
       color: #666;
     }
 
-    #search_input:focus {
+    .search_bar input:focus {
       text-align: left;
       border-radius: 0;
       width: 100%;
-      margin-bottom: 0;
       padding: 10px 10px;
     }
 
@@ -124,17 +116,15 @@
 
     .bgimg::before {
       content: "";
-      width: 100%;
-      height: 100%;
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
       background: linear-gradient(transparent 50%, var(--background) 95%);
     }
 
     .bgimg img {
-      display: block;
+      vertical-align: top;
       width: 100%;
+      pointer-events: none;
     }
 
     .bookmarks {
@@ -148,11 +138,8 @@
 
     .bookmarks::before {
       content: "";
-      width: 100%;
-      height: 100%;
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
       z-index: 1;
       pointer-events: none;
       background: linear-gradient(var(--background), transparent 10%, transparent 90%, var(--background));
@@ -195,6 +182,7 @@
     .icon {
       width: 55px;
       filter: drop-shadow(2px 2px 2px #727272);
+      pointer-events: none;
     }
 
     .box a p {
@@ -212,13 +200,12 @@
 <body>
 
   <div class="loading">
-    <img src="img/loading.gif" />
   </div>
 
   <div class="page">
 
     <form onsubmit="return search()" class="search_bar">
-      <input type="text" placeholder="百度一下，你就上当" autocomplete="off" id="search_input" />
+      <input type="text" placeholder="百度一下，你就上当" autocomplete="off" />
     </form>
 
     <div class="bgimg">
