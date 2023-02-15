@@ -14,11 +14,17 @@
   <meta name="theme-color" content="#F72405">
 
   <script type="text/javascript" src="./js/jquery.min.js"></script>
-  <script type="text/javascript" src="./js/search.js"></script>
   <script type="text/javascript" src="./js/color-thief.umd.js"></script>
   <script type="text/javascript" src="./js/rgbtohex.js"></script>
 
   <script language="javascript">
+    function search() {
+      if (document.querySelector(".search_bar input").value != "") {
+        location.href = "https://www.baidu.com/s?from=1011440l&word=" + document.querySelector(".search_bar input").value;
+        document.querySelector(".search_bar input").value = "";
+      } return false;
+    }
+
     const img = new Image();
     img.crossOrigin = "Anonymous";
     img.src = "./img.php";
@@ -57,7 +63,71 @@
     .loading {
       position: absolute;
       inset: 0;
-      background: url("img/loading.gif") no-repeat fixed center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      width: 150px;
+      height: 150px;
+      padding: 30px;
+      box-sizing: border-box;
+      border-radius: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      box-shadow: 0 12px 20px 6px rgba(104, 112, 118, 0.4);
+      transform-style: preserve-3d;
+      transform: rotateX(45deg) rotatez(45deg);
+    }
+
+    .square {
+      flex-basis: 30px;
+      background: #F72405;
+      position: relative;
+      transform-style: preserve-3d;
+      transform: translateZ(30px);
+      box-shadow: 90px 90px 15px rgba(0, 0, 0, 0.4);
+      -webkit-animation: beating 1s infinite;
+      animation: beating 1s infinite;
+      -webkit-animation-delay: calc(0.05s * var(--d));
+      animation-delay: calc(0.05s * var(--d));
+    }
+
+    @-webkit-keyframes beating {
+      50% {
+        transform: translateZ(15px);
+      }
+    }
+
+    @keyframes beating {
+      50% {
+        transform: translateZ(15px);
+      }
+    }
+
+    .square::before {
+      content: "";
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      left: 0;
+      top: 0;
+      background: #663731;
+      transform: rotateY(-90deg);
+      transform-origin: right center;
+    }
+
+    .square::after {
+      content: "";
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      left: 0;
+      top: 0;
+      background: #823327;
+      transform: rotateX(90deg);
+      transform-origin: right bottom;
     }
 
     .page {
@@ -66,8 +136,14 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      animation: move 0.5s ease-in-out 1;
-      animation-play-state: paused;
+      -webkit-animation: move 0.5s ease-in-out 1 paused;
+      animation: move 0.5s ease-in-out 1 paused;
+    }
+
+    @-webkit-keyframes move {
+      0% {
+        transform: translate3d(0, 100%, 0);
+      }
     }
 
     @keyframes move {
@@ -90,8 +166,11 @@
     }
 
     .search_bar:focus-within~div {
+      -webkit-filter: blur(5px);
       filter: blur(5px);
+      transition: -webkit-filter 0.3s ease-in-out;
       transition: filter 0.3s ease-in-out;
+      transition: filter 0.3s ease-in-out, -webkit-filter 0.3s ease-in-out;
       pointer-events: none;
     }
 
@@ -152,6 +231,7 @@
       width: 100%;
       height: 100%;
       overflow: scroll;
+      -ms-scroll-snap-type: y;
       scroll-snap-type: y;
       display: grid;
       grid-template-columns: repeat(3, 33.33%);
@@ -179,11 +259,13 @@
     }
 
     .box a:active {
+      -webkit-backdrop-filter: brightness(80%);
       backdrop-filter: brightness(80%);
     }
 
     .box img {
       width: 55px;
+      -webkit-filter: drop-shadow(2px 2px 2px #727272);
       filter: drop-shadow(2px 2px 2px #727272);
     }
 
@@ -202,6 +284,17 @@
 <body>
 
   <div class="loading">
+    <div class="container">
+      <div class="square" style="--d: 1"></div>
+      <div class="square" style="--d: 2"></div>
+      <div class="square" style="--d: 3"></div>
+      <div class="square" style="--d: 4"></div>
+      <div class="square" style="--d: 5"></div>
+      <div class="square" style="--d: 6"></div>
+      <div class="square" style="--d: 7"></div>
+      <div class="square" style="--d: 8"></div>
+      <div class="square" style="--d: 9"></div>
+    </div>
   </div>
 
   <div class="page">
@@ -247,7 +340,7 @@
         </div>
 
         <div class="box">
-          <a href="https://w.linovelib.com">
+          <a href="https://www.linovelib.com">
             <img src="img/bililight.png" />
             <p>哔哩轻小说</p>
           </a>
