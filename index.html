@@ -88,7 +88,7 @@
       transform-style: preserve-3d;
       transform: translateZ(30px);
       box-shadow: 90px 90px 15px rgba(0, 0, 0, 0.4);
-      -webkit-animation: beating 1s infinite;
+      -webkit-animation: beating 0.5s infinite;
       animation: beating 1s infinite;
       -webkit-animation-delay: calc(0.05s * var(--d));
       animation-delay: calc(0.05s * var(--d));
@@ -96,13 +96,15 @@
 
     @-webkit-keyframes beating {
       50% {
-        transform: translateZ(15px);
+        transform: translateZ(5px);
+        background: orange;
       }
     }
 
     @keyframes beating {
       50% {
-        transform: translateZ(15px);
+        transform: translateZ(5px);
+        background: orange;
       }
     }
 
@@ -340,7 +342,7 @@
         </div>
 
         <div class="box">
-          <a href="https://www.linovelib.com">
+          <a href="https://w.linovelib.com">
             <img src="img/bililight.png" />
             <p>哔哩轻小说</p>
           </a>
