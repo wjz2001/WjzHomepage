@@ -66,6 +66,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      background: white;
     }
 
     .container {
@@ -76,7 +77,7 @@
       border-radius: 15px;
       display: flex;
       flex-wrap: wrap;
-      box-shadow: 0 12px 20px 6px rgba(104, 112, 118, 0.4);
+      box-shadow: 0 12px 20px 6px #68707666;
       transform-style: preserve-3d;
       transform: rotateX(45deg) rotatez(45deg);
     }
@@ -87,7 +88,7 @@
       position: relative;
       transform-style: preserve-3d;
       transform: translateZ(30px);
-      box-shadow: 90px 90px 15px rgba(0, 0, 0, 0.4);
+      box-shadow: 90px 90px 15px #00000066;
       -webkit-animation: beating 1s infinite;
       animation: beating 1s infinite;
       -webkit-animation-delay: calc(0.05s * var(--d));
@@ -96,14 +97,14 @@
 
     @-webkit-keyframes beating {
       50% {
-        transform: translateZ(5px);
+        transform: translateZ(-5px);
         background: orange;
       }
     }
 
     @keyframes beating {
       50% {
-        transform: translateZ(5px);
+        transform: translateZ(-5px);
         background: orange;
       }
     }
@@ -182,10 +183,10 @@
       border: none;
       font-size: 0.85em;
       text-align: center;
-      background: #eee;
+      background: #eeeeee;
       border-radius: 15px;
       outline: 1.0em;
-      color: #666;
+      color: #666666;
     }
 
     .search_bar input:focus {
