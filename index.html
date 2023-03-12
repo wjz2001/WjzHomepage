@@ -44,7 +44,6 @@
       $(".loading").fadeOut();
 
       var box_all = document.querySelectorAll(".box");
-      var box_get = document.getElementsByClassName("box");
       var bookmarks_content = document.querySelector(".bookmarks_content");
 
       for (var i1 = 0; i1 < 3 - (box_all.length % 3); i1++) {
@@ -64,13 +63,13 @@
         i2++;
       }
 
-      bookmarks_content.scrollTop = box_get[0].offsetHeight * 3;
+      bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
 
       bookmarks_content.addEventListener("scroll", bookmarks_scroll);
       bookmarks_content.addEventListener("touchmove", bookmarks_scroll);
       function bookmarks_scroll() {
         if (bookmarks_content.scrollTop + bookmarks_content.clientHeight + 1 >= bookmarks_content.scrollHeight || bookmarks_content.scrollTop === 0) {
-          bookmarks_content.scrollTop = box_get[0].offsetHeight * 3;
+          bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
         };
       };
     };
