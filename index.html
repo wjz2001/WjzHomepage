@@ -43,25 +43,34 @@
       document.querySelector(".page").style.setProperty("animation-play-state", "running");
       $(".loading").fadeOut();
 
-      var box_number = document.querySelectorAll(".box").length;
-      var box_number_replenish = 3 - (box_number % 3);
+      var box_all = document.querySelectorAll(".box");
       var box_get = document.getElementsByClassName("box");
+      var bookmarks_content = document.querySelector(".bookmarks_content");
 
-      for (var i1 = 0; i1 < box_number_replenish; i1++) {
+      for (var i1 = 0; i1 < 3 - (box_all.length % 3); i1++) {
         var box_create = document.createElement("div");
         box_create.className = "box";
-        document.querySelector(".bookmarks_content").appendChild(box_create);
+        bookmarks_content.appendChild(box_create);
       };
 
-      for (var i2 = 0; i2 < box_number; i2++) {
-        document.querySelector(".bookmarks_content").appendChild(box_get[0 + i2].cloneNode(true));
-      };
+      var box_all = document.querySelectorAll(".box");
 
-      document.querySelector(".bookmarks_content").addEventListener("scroll", bookmarks_scroll);
-      document.querySelector(".bookmarks_content").addEventListener("touchmove", bookmarks_scroll);
+      var i2 = 0;
+      while (i2 < 2) {
+        for (var i3 = 0; i3 < box_all.length; i3++) {
+          var box_clone = box_all[0 + i3].cloneNode(true);
+          bookmarks_content.appendChild(box_clone);
+        };
+        i2++;
+      }
+
+      bookmarks_content.scrollTop = box_get[0].offsetHeight * 3;
+
+      bookmarks_content.addEventListener("scroll", bookmarks_scroll);
+      bookmarks_content.addEventListener("touchmove", bookmarks_scroll);
       function bookmarks_scroll() {
-        if (document.querySelector(".bookmarks_content").scrollTop + document.querySelector(".bookmarks_content").clientHeight === document.querySelector(".bookmarks_content").scrollHeight) {
-          document.querySelector(".bookmarks_content").scrollTop = 0;
+        if (bookmarks_content.scrollTop + bookmarks_content.clientHeight + 1 >= bookmarks_content.scrollHeight || bookmarks_content.scrollTop === 0) {
+          bookmarks_content.scrollTop = box_get[0].offsetHeight * 3;
         };
       };
     };
@@ -179,7 +188,6 @@
     }
 
     .search_bar {
-      margin-bottom: 40px;
       text-align: center;
       order: 1;
     }
@@ -201,6 +209,7 @@
     }
 
     .search_bar input {
+      margin-bottom: 40px;
       line-height: 1.8em;
       width: 84%;
       border: none;
@@ -237,7 +246,8 @@
 
     .bookmarks {
       position: relative;
-      flex-basis: 100%;
+      flex: 1;
+      overflow: hidden;
     }
 
     .bookmarks:active::before {
