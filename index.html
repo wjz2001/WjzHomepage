@@ -34,7 +34,8 @@
     img.addEventListener("load", function () {
       var imgcolor = colorThief.getPalette(img, 5);
       var sRgb = "RGB(" + imgcolor[Math.floor(Math.random() * imgcolor.length)] + ")";
-      document.documentElement.style.setProperty("--background", sRgb.colorHex());
+      document.documentElement.style.setProperty("--backgroundcolor", sRgb.colorHex());
+      document.documentElement.style.setProperty("--background", "url(" + img.src + ")");
       document.querySelector("meta[name='theme-color']").setAttribute("content", sRgb.colorHex());
       document.querySelector(".bgimg img").src = img.src;
     });
@@ -104,8 +105,25 @@
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background: var(--background);
       transition: background 1s ease-in-out;
+    }
+
+    @media screen and (orientation: landscape) {
+
+      body {
+        position: relative;
+      }
+
+      body::before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: -1;
+        background: var(--background);
+        background-size: cover;
+        filter: blur(10px);
+      }
     }
 
     img {
@@ -189,10 +207,20 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
+      background: var(--backgroundcolor);
       display: flex;
       flex-direction: column;
       -webkit-animation: move 0.5s ease-in-out 1 paused;
       animation: move 0.5s ease-in-out 1 paused;
+    }
+
+    @media screen and (orientation: landscape) {
+      .page {
+        aspect-ratio: 9 / 18;
+        height: 100%;
+        width: auto;
+        margin: 0 auto;
+      }
     }
 
     @-webkit-keyframes move {
@@ -256,7 +284,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(transparent 50%, var(--background) 95%);
+      background: linear-gradient(transparent 50%, var(--backgroundcolor) 95%);
     }
 
     .bgimg img {
@@ -280,20 +308,18 @@
       inset: 0;
       z-index: 1;
       pointer-events: none;
-      background: linear-gradient(var(--background), transparent 10%, transparent 90%, var(--background));
+      background: linear-gradient(var(--backgroundcolor), transparent 10%, transparent 90%, var(--backgroundcolor));
     }
 
     .bookmarks_content {
       width: 100%;
       height: 100%;
       overflow-y: scroll;
-      -ms-scroll-snap-type: y;
       scroll-snap-type: y;
       display: grid;
       grid-template-columns: repeat(3, 33.33%);
       grid-template-rows: repeat(3, 33.33%);
       grid-auto-rows: 33.33%;
-      -ms-overflow-style: none;
       overflow: -moz-scrollbars-none;
     }
 
