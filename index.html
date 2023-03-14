@@ -79,7 +79,7 @@
         timeOutEvent = setTimeout(function () {
           timeOutEvent = 0;
           bookmarks_content.style.setProperty("scroll-behavior", "smooth");
-          bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
+          bookmarks_content.scrollTop = Math.floor((bookmarks_content.scrollTop + bookmarks_content.clientHeight) / (bookmarks_content.clientHeight * 3));
           bookmarks_content.style.removeProperty("scroll-behavior");
         }, 700);
       });
@@ -286,7 +286,7 @@
     .bookmarks_content {
       width: 100%;
       height: 100%;
-      overflow: scroll;
+      overflow-y: scroll;
       -ms-scroll-snap-type: y;
       scroll-snap-type: y;
       display: grid;
