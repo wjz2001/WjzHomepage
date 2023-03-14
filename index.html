@@ -16,6 +16,7 @@
   <script type="text/javascript" src="./js/jquery.min.js"></script>
   <script type="text/javascript" src="./js/color-thief.umd.js"></script>
   <script type="text/javascript" src="./js/rgbtohex.js"></script>
+  <script type="text/javascript" src="./img.php"></script>
 
   <script language="javascript">
     function search() {
@@ -26,9 +27,10 @@
       } return false;
     }
 
+    var img_array = JSON.parse(img_array_json);
     const img = new Image();
     img.crossOrigin = "Anonymous";
-    img.src = "./img.php";
+    img.src = img_array[Math.floor((Math.random() * img_array.length))];
     const colorThief = new ColorThief();
 
     img.addEventListener("load", function () {
@@ -112,6 +114,7 @@
 
       body {
         position: relative;
+        background: var(--backgroundcolor);
       }
 
       body::before {
