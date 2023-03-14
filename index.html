@@ -72,6 +72,27 @@
           bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
         };
       };
+
+      let timeOutEvent = 0;
+      document.querySelector(".bgimg").addEventListener('touchstart', function (e) {
+        e.preventDefault();
+        timeOutEvent = setTimeout(function () {
+          timeOutEvent = 0;
+          bookmarks_content.style.setProperty("scroll-behavior", "smooth");
+          bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
+          bookmarks_content.style.removeProperty("scroll-behavior");
+        }, 700);
+      });
+
+      document.querySelector(".bgimg").addEventListener('touchmove', function (e) {
+        clearTimeout(timeOutEvent);
+        timeOutEvent = 0;
+      });
+
+      document.querySelector(".bgimg").addEventListener('touchend', function (e) {
+        clearTimeout(timeOutEvent);
+        return false;
+      });
     };
   </script>
 
