@@ -16,7 +16,11 @@
   <script type="text/javascript" src="./js/jquery.min.js"></script>
   <script type="text/javascript" src="./js/color-thief.umd.js"></script>
   <script type="text/javascript" src="./js/rgbtohex.js"></script>
-  <script type="text/javascript" src="./img.php"></script>
+
+  <?php
+  $img_array = glob("img/background/*.{webp,jpg,png}", GLOB_BRACE);
+  $img_array_json = json_encode($img_array);
+  ?>
 
   <script language="javascript">
     function search() {
@@ -27,7 +31,7 @@
       } return false;
     }
 
-    var img_array = JSON.parse(img_array_json);
+    var img_array = JSON.parse('<?php echo $img_array_json?>');
     const img = new Image();
     img.crossOrigin = "Anonymous";
     img.src = img_array[Math.floor((Math.random() * img_array.length))];
