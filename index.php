@@ -31,7 +31,7 @@
       } return false;
     }
 
-    var img_array = JSON.parse('<?php echo $img_array_json?>');
+    var img_array = JSON.parse('<?php echo $img_array_json ?>');
     const img = new Image();
     img.crossOrigin = "Anonymous";
     img.src = img_array[Math.floor((Math.random() * img_array.length))];
@@ -227,6 +227,8 @@
         height: 100%;
         width: auto;
         margin: 0 auto;
+        box-shadow: 0 0 10px #565656;
+        border-radius: 15px;
       }
     }
 
