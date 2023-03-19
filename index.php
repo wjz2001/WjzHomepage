@@ -3,7 +3,7 @@
 
 <head>
 
-  <title>手机主页</title>
+  <title>主页</title>
 
   <link href="img/logo.ico" rel="SHORTCUT ICON" />
 
@@ -28,7 +28,8 @@
       if (search_bar.value != "") {
         location.href = "https://www.baidu.com/s?from=1011440l&word=" + search_bar.value;
         search_bar.value = "";
-      } return false;
+      };
+      return false;
     }
 
     var img_array = JSON.parse('<?php echo $img_array_json ?>');
@@ -40,18 +41,21 @@
     img.addEventListener("load", function () {
       var imgcolor = colorThief.getPalette(img, 5);
       var sRgb = "RGB(" + imgcolor[Math.floor(Math.random() * imgcolor.length)] + ")";
-      document.documentElement.style.setProperty("--backgroundcolor", sRgb.colorHex());
-      document.documentElement.style.setProperty("--background", "url(" + img.src + ")");
       document.querySelector("meta[name='theme-color']").setAttribute("content", sRgb.colorHex());
+      document.documentElement.style.setProperty("--background", "url(" + img.src + ")");
+      document.documentElement.style.setProperty("--background_color", sRgb.colorHex());
       document.querySelector(".bgimg img").src = img.src;
     });
+
+    var bgimg, bookmarks_content, box_all;
 
     window.onload = function () {
       document.querySelector(".page").style.setProperty("animation-play-state", "running");
       $(".loading").fadeOut();
 
-      var box_all = document.querySelectorAll(".box");
-      var bookmarks_content = document.querySelector(".bookmarks_content");
+      bgimg = document.querySelector(".bgimg");
+      bookmarks_content = document.querySelector(".bookmarks_content");
+      box_all = document.querySelectorAll(".box");
 
       for (var i1 = 0; i1 < 3 - (box_all.length % 3); i1++) {
         var box_create = document.createElement("div");
@@ -59,44 +63,70 @@
         bookmarks_content.appendChild(box_create);
       };
 
-      var box_all = document.querySelectorAll(".box");
-
+      box_all = document.querySelectorAll(".box");
       var i2 = 0;
       while (i2 < 2) {
         for (var i3 = 0; i3 < box_all.length; i3++) {
-          var box_clone = box_all[0 + i3].cloneNode(true);
-          bookmarks_content.appendChild(box_clone);
+          bookmarks_content.appendChild(box_all[0 + i3].cloneNode(true));
         };
         i2++;
-      }
+      };
 
       bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
 
-      bookmarks_content.addEventListener("scroll", bookmarks_scroll);
-      bookmarks_content.addEventListener("touchmove", bookmarks_scroll);
       function bookmarks_scroll() {
         if (bookmarks_content.scrollTop + bookmarks_content.clientHeight + 1 >= bookmarks_content.scrollHeight || bookmarks_content.scrollTop === 0) {
           bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
         };
       };
+      bookmarks_content.addEventListener("scroll", bookmarks_scroll);
+      bookmarks_content.addEventListener("touchmove", bookmarks_scroll);
+
+      function scroll(fn) {
+        var beforeScrollTop = $(bookmarks_content).scrollTop(),
+          fn = fn || function () { };
+        bookmarks_content.addEventListener("scroll", function () {
+          var afterScrollTop = $(bookmarks_content).scrollTop(),
+            delta = afterScrollTop - beforeScrollTop;
+          if (delta === 0) return false;
+          fn(delta > 0 ? "down" : "up");
+          beforeScrollTop = afterScrollTop;
+        }, false);
+      };
+
+      scroll(function (direction) {
+        bookmarks_direction = direction;
+      });
 
       let timeOutEvent = 0;
-      document.querySelector(".bgimg").addEventListener('touchstart', function (e) {
-        e.preventDefault();
-        timeOutEvent = setTimeout(function () {
-          timeOutEvent = 0;
-          bookmarks_content.style.setProperty("scroll-behavior", "smooth");
-          bookmarks_content.scrollTop = Math.floor((bookmarks_content.scrollTop + bookmarks_content.clientHeight) / (bookmarks_content.clientHeight * 3));
-          bookmarks_content.style.removeProperty("scroll-behavior");
-        }, 700);
-      });
-
-      document.querySelector(".bgimg").addEventListener('touchmove', function (e) {
-        clearTimeout(timeOutEvent);
+      function bookmark_reset() {
         timeOutEvent = 0;
+        bookmarks_content.style.setProperty("scroll-behavior", "smooth");
+        if (bookmarks_direction == "down") {
+          bookmarks_content.scrollTop = bookmarks_content.scrollTop - ((bookmarks_content.scrollTop + bookmarks_content.clientHeight) % (bookmarks_content.scrollHeight / 3));
+        };
+        if (bookmarks_direction == "up") {
+          bookmarks_content.scrollTop = bookmarks_content.scrollTop + bookmarks_content.clientHeight - ((bookmarks_content.scrollTop + bookmarks_content.clientHeight) % (bookmarks_content.scrollHeight / 3));
+        };
+        bookmarks_content.style.removeProperty("scroll-behavior");
+      };
+
+      bgimg.addEventListener("touchstart", function (e) {
+        e.preventDefault();
+        timeOutEvent = setTimeout(bookmark_reset, 700);
       });
 
-      document.querySelector(".bgimg").addEventListener('touchend', function (e) {
+      bgimg.addEventListener("touchend", function (e) {
+        clearTimeout(timeOutEvent);
+        return false;
+      });
+
+      bgimg.addEventListener("mousedown", function (e) {
+        e.preventDefault();
+        timeOutEvent = setTimeout(bookmark_reset, 700);
+      });
+
+      bgimg.addEventListener("mouseup", function (e) {
         clearTimeout(timeOutEvent);
         return false;
       });
@@ -118,13 +148,12 @@
 
       body {
         position: relative;
-        background: var(--backgroundcolor);
+        background: var(--background_color);
       }
 
       body::before {
         content: "";
-        width: 100%;
-        height: 100%;
+        inset: 0;
         position: absolute;
         z-index: -1;
         background: var(--background);
@@ -214,7 +243,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: var(--backgroundcolor);
+      background: var(--background_color);
       display: flex;
       flex-direction: column;
       -webkit-animation: move 0.5s ease-in-out 1 paused;
@@ -227,7 +256,7 @@
         height: 100%;
         width: auto;
         margin: 0 auto;
-        box-shadow: 0 0 10px #565656;
+        box-shadow: 0 0 10px black;
         border-radius: 15px;
       }
     }
@@ -293,7 +322,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(transparent 50%, var(--backgroundcolor) 95%);
+      background: linear-gradient(transparent 50%, var(--background_color) 95%);
     }
 
     .bgimg img {
@@ -317,7 +346,7 @@
       inset: 0;
       z-index: 1;
       pointer-events: none;
-      background: linear-gradient(var(--backgroundcolor), transparent 10%, transparent 90%, var(--backgroundcolor));
+      background: linear-gradient(var(--background_color), transparent 10%, transparent 90%, var(--background_color));
     }
 
     .bookmarks_content {
@@ -390,7 +419,7 @@
 
   <div class="page">
 
-    <form onsubmit="return search()" class="search_bar">
+    <form class="search_bar" onsubmit="return search()">
       <input type="text" placeholder="百度一下，你就上当" autocomplete="off" />
     </form>
 
