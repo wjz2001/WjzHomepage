@@ -13,16 +13,16 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta name="theme-color" content="#F72405">
 
-  <script type="text/javascript" src="./js/jquery.min.js"></script>
-  <script type="text/javascript" src="./js/color-thief.umd.js"></script>
-  <script type="text/javascript" src="./js/rgbtohex.js"></script>
+  <script src="./js/jquery.min.js"></script>
+  <script src="./js/color-thief.umd.js"></script>
+  <script src="./js/rgbtohex.js"></script>
 
   <?php
   $img_array = glob("img/background/*.{webp,jpg,png}", GLOB_BRACE);
   $img_array_json = json_encode($img_array);
   ?>
 
-  <script language="javascript">
+  <script>
     function search() {
       var search_bar = document.querySelector(".search_bar input");
       if (search_bar.value != "") {
@@ -160,6 +160,16 @@
         background-size: cover;
         filter: blur(10px);
       }
+
+      body:has(.search_bar:focus-within)::before {
+        filter: none;
+        transition: filter 0.3s linear;
+      }
+
+      body:has(.search_bar:focus-within) .bgimg {
+        filter: blur(5px);
+        transition: filter 0.3s linear;
+      }
     }
 
     img {
@@ -195,17 +205,8 @@
       transform-style: preserve-3d;
       transform: translateZ(30px);
       box-shadow: 90px 90px 15px #00000066;
-      -webkit-animation: beating 1s infinite;
       animation: beating 1s infinite;
-      -webkit-animation-delay: calc(0.05s * var(--d));
       animation-delay: calc(0.05s * var(--d));
-    }
-
-    @-webkit-keyframes beating {
-      50% {
-        transform: translateZ(-5px);
-        background: orange;
-      }
     }
 
     @keyframes beating {
@@ -246,7 +247,6 @@
       background: var(--background_color);
       display: flex;
       flex-direction: column;
-      -webkit-animation: move 0.5s ease-in-out 1 paused;
       animation: move 0.5s ease-in-out 1 paused;
     }
 
@@ -256,14 +256,8 @@
         height: 100%;
         width: auto;
         margin: 0 auto;
-        box-shadow: 0 0 10px black;
+        box-shadow: 0 0 15px black;
         border-radius: 15px;
-      }
-    }
-
-    @-webkit-keyframes move {
-      0% {
-        transform: translate3d(0, 100%, 0);
       }
     }
 
@@ -279,20 +273,19 @@
       order: 1;
     }
 
-    .search_bar:focus-within {
-      position: relative;
-      z-index: 1;
-      padding-bottom: 0;
-      order: 0;
-    }
+    @media (pointer: coarse) {
+      .search_bar:focus-within {
+        position: relative;
+        z-index: 1;
+        padding-bottom: 0;
+        order: 0;
+      }
 
-    .search_bar:focus-within~div {
-      -webkit-filter: blur(5px);
-      filter: blur(5px);
-      transition: -webkit-filter 0.3s ease-in-out;
-      transition: filter 0.3s ease-in-out;
-      transition: filter 0.3s ease-in-out, -webkit-filter 0.3s ease-in-out;
-      pointer-events: none;
+      .search_bar:focus-within~div {
+        filter: blur(5px);
+        transition: filter 0.3s ease-in-out;
+        pointer-events: none;
+      }
     }
 
     .search_bar input {
@@ -307,11 +300,13 @@
       color: #666666;
     }
 
-    .search_bar input:focus {
-      text-align: left;
-      border-radius: 0;
-      width: 100%;
-      padding: 10px 10px;
+    @media (pointer: coarse) {
+      .search_bar input:focus {
+        text-align: left;
+        border-radius: 0;
+        width: 100%;
+        padding: 10px 10px;
+      }
     }
 
     .bgimg {
@@ -379,13 +374,11 @@
     }
 
     .box a:active {
-      -webkit-backdrop-filter: brightness(80%);
       backdrop-filter: brightness(80%);
     }
 
     .box img {
       width: 55px;
-      -webkit-filter: drop-shadow(2px 2px 2px #727272);
       filter: drop-shadow(2px 2px 2px #727272);
     }
 
