@@ -14,6 +14,8 @@
   <meta name="theme-color" content="#F72405">
 
   <script src="./js/jquery.min.js"></script>
+  <script src="./js/jquery.mousewheel.js"></script>
+  <script src="./js/jquerymobile-swipeupdown.js"></script>
   <script src="./js/color-thief.umd.js"></script>
   <script src="./js/rgbtohex.js"></script>
 
@@ -24,7 +26,7 @@
 
   <script>
     function search() {
-      var search_bar = document.querySelector(".search_bar input");
+      const search_bar = document.querySelector(".search_bar input");
       if (search_bar.value != "") {
         location.href = "https://www.baidu.com/s?from=1011440l&word=" + search_bar.value;
         search_bar.value = "";
@@ -32,15 +34,15 @@
       return false;
     }
 
-    var img_array = JSON.parse('<?php echo $img_array_json ?>');
+    const img_array = JSON.parse('<?php echo $img_array_json ?>');
     const img = new Image();
     img.crossOrigin = "Anonymous";
     img.src = img_array[Math.floor((Math.random() * img_array.length))];
     const colorThief = new ColorThief();
 
     img.addEventListener("load", function () {
-      var imgcolor = colorThief.getPalette(img, 5);
-      var sRgb = "RGB(" + imgcolor[Math.floor(Math.random() * imgcolor.length)] + ")";
+      const imgcolor = colorThief.getPalette(img, 5);
+      const sRgb = "RGB(" + imgcolor[Math.floor(Math.random() * imgcolor.length)] + ")";
       document.querySelector("meta[name='theme-color']").setAttribute("content", sRgb.colorHex());
       document.documentElement.style.setProperty("--background", "url(" + img.src + ")");
       document.documentElement.style.setProperty("--background_color", sRgb.colorHex());
@@ -57,16 +59,16 @@
       bookmarks_content = document.querySelector(".bookmarks_content");
       box_all = document.querySelectorAll(".box");
 
-      for (var i1 = 0; i1 < 3 - (box_all.length % 3); i1++) {
-        var box_create = document.createElement("div");
+      for (let i1 = 0; i1 < 3 - (box_all.length % 3); i1++) {
+        const box_create = document.createElement("div");
         box_create.className = "box";
         bookmarks_content.appendChild(box_create);
       };
 
       box_all = document.querySelectorAll(".box");
-      var i2 = 0;
+      let i2 = 0;
       while (i2 < 2) {
-        for (var i3 = 0; i3 < box_all.length; i3++) {
+        for (let i3 = 0; i3 < box_all.length; i3++) {
           bookmarks_content.appendChild(box_all[0 + i3].cloneNode(true));
         };
         i2++;
@@ -74,9 +76,16 @@
 
       bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
 
+      let bookmarks_direction2;
       function bookmarks_scroll() {
-        if (bookmarks_content.scrollTop + bookmarks_content.clientHeight + 1 >= bookmarks_content.scrollHeight || bookmarks_content.scrollTop === 0) {
+        if (bookmarks_content.scrollTop + bookmarks_content.clientHeight + 1 >= bookmarks_content.scrollHeight) {
+          bookmarks_content.scrollTop = bookmarks_content.scrollTop - bookmarks_content.scrollHeight / 3;
+          bookmarks_direction2 = "down";
+        };
+
+        if (bookmarks_content.scrollTop === 0) {
           bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
+          bookmarks_direction2 = "up";
         };
       };
       bookmarks_content.addEventListener("scroll", bookmarks_scroll);
@@ -96,24 +105,29 @@
 
       scroll(function (direction) {
         bookmarks_direction = direction;
+        bookmarks_direction2 = "undefined";
       });
 
       let timeOutEvent = 0;
-      function bookmark_reset() {
+      function bookmarks_reset() {
         timeOutEvent = 0;
+
         bookmarks_content.style.setProperty("scroll-behavior", "smooth");
-        if (bookmarks_direction == "down") {
-          bookmarks_content.scrollTop = bookmarks_content.scrollTop - ((bookmarks_content.scrollTop + bookmarks_content.clientHeight) % (bookmarks_content.scrollHeight / 3));
+
+        if (bookmarks_direction == "down" && bookmarks_direction2 != "up" || bookmarks_direction2 == "down") {
+          bookmarks_content.scrollTop = bookmarks_content.scrollTop - bookmarks_content.scrollTop % Math.floor(bookmarks_content.scrollHeight / 3);
         };
-        if (bookmarks_direction == "up") {
-          bookmarks_content.scrollTop = bookmarks_content.scrollTop + bookmarks_content.clientHeight - ((bookmarks_content.scrollTop + bookmarks_content.clientHeight) % (bookmarks_content.scrollHeight / 3));
+
+        if (bookmarks_direction == "up" && bookmarks_direction2 != "down" || bookmarks_direction2 == "up") {
+          bookmarks_content.scrollTop = bookmarks_content.scrollTop + bookmarks_content.scrollHeight / 3 - bookmarks_content.scrollTop % Math.floor(bookmarks_content.scrollHeight / 3);
         };
+
         bookmarks_content.style.removeProperty("scroll-behavior");
       };
 
       bgimg.addEventListener("touchstart", function (e) {
         e.preventDefault();
-        timeOutEvent = setTimeout(bookmark_reset, 700);
+        timeOutEvent = setTimeout(bookmarks_reset, 700);
       });
 
       bgimg.addEventListener("touchend", function (e) {
@@ -123,7 +137,7 @@
 
       bgimg.addEventListener("mousedown", function (e) {
         e.preventDefault();
-        timeOutEvent = setTimeout(bookmark_reset, 700);
+        timeOutEvent = setTimeout(bookmarks_reset, 700);
       });
 
       bgimg.addEventListener("mouseup", function (e) {
@@ -268,7 +282,7 @@
     }
 
     .search_bar {
-      padding-bottom: 40px;
+      padding: 50px 0 40px;
       text-align: center;
       order: 1;
     }
@@ -277,7 +291,7 @@
       .search_bar:focus-within {
         position: relative;
         z-index: 1;
-        padding-bottom: 0;
+        padding: 0;
         order: 0;
       }
 
@@ -463,6 +477,27 @@
           <a href="https://m.manhuagui.com/user/book/shelf">
             <img src="img/manhuagui.png" />
             <p>漫画柜</p>
+          </a>
+        </div>
+
+        <div class="box">
+          <a href="https://syosetu.com/favnovelmain18/list/?nowcategory=1">
+            <img src="img/成为小说家吧R18.png" />
+            <p>成为小说家吧X</p>
+          </a>
+        </div>
+
+        <div class="box">
+          <a href="https://syosetu.com/favnovelmain/list/?nowcategory=1">
+            <img src="img/成为小说家吧.png" />
+            <p>成为小说家吧</p>
+          </a>
+        </div>
+
+        <div class="box">
+          <a href="https://kakuyomu.jp/users/wswjzColby/following_works">
+            <img src="img/カクヨム.png" />
+            <p>カクヨム</p>
           </a>
         </div>
 
