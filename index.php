@@ -14,8 +14,6 @@
   <meta name="theme-color" content="#F72405">
 
   <script src="./js/jquery.min.js"></script>
-  <script src="./js/jquery.mousewheel.js"></script>
-  <script src="./js/jquerymobile-swipeupdown.js"></script>
   <script src="./js/color-thief.umd.js"></script>
   <script src="./js/rgbtohex.js"></script>
 
