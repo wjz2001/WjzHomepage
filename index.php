@@ -14,6 +14,7 @@
   <meta name="theme-color" content="#F72405">
 
   <script src="./js/jquery.min.js"></script>
+  <script src="./js/jquery.mousewheel.min.js"></script>
   <script src="./js/color-thief.umd.js"></script>
   <script src="./js/rgbtohex.js"></script>
 
@@ -74,36 +75,42 @@
 
       bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
 
-      let bookmarks_direction2;
       function bookmarks_scroll() {
         if (bookmarks_content.scrollTop + bookmarks_content.clientHeight + 1 >= bookmarks_content.scrollHeight) {
           bookmarks_content.scrollTop = bookmarks_content.scrollTop - bookmarks_content.scrollHeight / 3;
-          bookmarks_direction2 = "down";
-        };
-
-        if (bookmarks_content.scrollTop === 0) {
-          bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
-          bookmarks_direction2 = "up";
-        };
+        } else
+          if (bookmarks_content.scrollTop === 0) {
+            bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
+          };
       };
       bookmarks_content.addEventListener("scroll", bookmarks_scroll);
       bookmarks_content.addEventListener("touchmove", bookmarks_scroll);
 
-      function scroll(fn) {
-        var beforeScrollTop = $(bookmarks_content).scrollTop(),
-          fn = fn || function () { };
-        bookmarks_content.addEventListener("scroll", function () {
-          var afterScrollTop = $(bookmarks_content).scrollTop(),
-            delta = afterScrollTop - beforeScrollTop;
-          if (delta === 0) return false;
-          fn(delta > 0 ? "down" : "up");
-          beforeScrollTop = afterScrollTop;
-        }, false);
-      };
+      var bookmarks_direction;
+      $(".bookmarks_content").bind('touchstart', function (e) {
+        startY = e.originalEvent.changedTouches[0].pageY;
+      });
 
-      scroll(function (direction) {
-        bookmarks_direction = direction;
-        bookmarks_direction2 = "undefined";
+      $(".bookmarks_content").bind("touchmove", function (e) {
+        endY = e.originalEvent.changedTouches[0].pageY;
+
+        distanceY = endY - startY;
+
+        if (distanceY < 0) {
+          bookmarks_direction = "down";
+        } else
+          if (distanceY > 0) {
+            bookmarks_direction == "up";
+          };
+      });
+
+      $(".bookmarks_content").mousewheel(function (event) {
+        if (event.deltaY < 0) {
+          bookmarks_direction = "down";
+        } else
+          if (event.deltaY > 0) {
+            bookmarks_direction = "up";
+          };
       });
 
       let timeOutEvent = 0;
@@ -112,13 +119,12 @@
 
         bookmarks_content.style.setProperty("scroll-behavior", "smooth");
 
-        if (bookmarks_direction == "down" && bookmarks_direction2 != "up" || bookmarks_direction2 == "down") {
+        if (bookmarks_direction == "down" && bookmarks_content.scrollTop % Math.floor(bookmarks_content.scrollHeight / 3) > 1) {
           bookmarks_content.scrollTop = bookmarks_content.scrollTop - bookmarks_content.scrollTop % Math.floor(bookmarks_content.scrollHeight / 3);
-        };
-
-        if (bookmarks_direction == "up" && bookmarks_direction2 != "down" || bookmarks_direction2 == "up") {
-          bookmarks_content.scrollTop = bookmarks_content.scrollTop + bookmarks_content.scrollHeight / 3 - bookmarks_content.scrollTop % Math.floor(bookmarks_content.scrollHeight / 3);
-        };
+        } else
+          if (bookmarks_direction == "up" && bookmarks_content.scrollTop % Math.floor(bookmarks_content.scrollHeight / 3) > 1) {
+            bookmarks_content.scrollTop = bookmarks_content.scrollTop + bookmarks_content.scrollHeight / 3 - bookmarks_content.scrollTop % Math.floor(bookmarks_content.scrollHeight / 3);
+          };
 
         bookmarks_content.style.removeProperty("scroll-behavior");
       };
