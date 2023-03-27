@@ -127,25 +127,27 @@
         bookmarks_content.style.removeProperty("scroll-behavior");
       };
 
-      bgimg.addEventListener("touchstart", function (e) {
+      function bgimg_event_start(e) {
         e.preventDefault();
         timeOutEvent = setTimeout(bookmarks_reset, 700);
-      });
+      };
 
-      bgimg.addEventListener("touchend", function (e) {
+      function bgimg_event_end(e) {
         clearTimeout(timeOutEvent);
         return false;
-      });
+      };
 
-      bgimg.addEventListener("mousedown", function (e) {
-        e.preventDefault();
-        timeOutEvent = setTimeout(bookmarks_reset, 700);
-      });
+      bgimg.addEventListener("touchstart", bgimg_event_start);
+      bgimg.addEventListener("touchend", bgimg_event_end);
+      bgimg.addEventListener("mousedown", bgimg_event_start);
+      bgimg.addEventListener("mouseup", bgimg_event_end);
 
-      bgimg.addEventListener("mouseup", function (e) {
-        clearTimeout(timeOutEvent);
-        return false;
-      });
+      for (let i4 = 0; i4 < 2; i4++) {
+        document.querySelectorAll(".body_blanks")[i4].addEventListener("touchstart", bgimg_event_start);
+        document.querySelectorAll(".body_blanks")[i4].addEventListener("touchend", bgimg_event_end);
+        document.querySelectorAll(".body_blanks")[i4].addEventListener("mousedown", bgimg_event_start);
+        document.querySelectorAll(".body_blanks")[i4].addEventListener("mouseup", bgimg_event_end);
+      }
     };
   </script>
 
@@ -165,6 +167,7 @@
       body {
         position: relative;
         background: var(--background_color);
+        display: flex;
       }
 
       body::before {
@@ -185,6 +188,10 @@
       body:has(.search_bar:focus-within) .bgimg {
         filter: blur(5px);
         transition: filter 0.3s linear;
+      }
+
+      .body_blanks {
+        flex: 1;
       }
     }
 
@@ -284,7 +291,7 @@
     }
 
     .search_bar {
-      padding: 40px 0 40px;
+      padding: 30px 0 40px;
       text-align: center;
       order: 1;
     }
@@ -426,6 +433,8 @@
     </div>
   </div>
 
+  <div class="body_blanks"></div>
+
   <div class="page">
 
     <form class="search_bar" onsubmit="return search()">
@@ -515,6 +524,8 @@
     </div>
 
   </div>
+
+  <div class="body_blanks"></div>
 
 </body>
 
