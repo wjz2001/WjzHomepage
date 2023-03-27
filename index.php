@@ -86,25 +86,23 @@
       bookmarks_content.addEventListener("scroll", bookmarks_scroll);
       bookmarks_content.addEventListener("touchmove", bookmarks_scroll);
 
-      var bookmarks_direction;
-      $(".bookmarks_content").bind('touchstart', function (e) {
-        startY = e.originalEvent.changedTouches[0].pageY;
+      var bookmarks_direction, startY, endY;
+      $(bookmarks_content).bind("touchstart", function (e) {
+        startY = e.originalEvent.changedTouches[0].screenY;
       });
 
-      $(".bookmarks_content").bind("touchmove", function (e) {
-        endY = e.originalEvent.changedTouches[0].pageY;
+      $(bookmarks_content).bind("touchmove", function (e) {
+        endY = e.originalEvent.changedTouches[0].screenY;
 
-        distanceY = endY - startY;
-
-        if (distanceY < 0) {
+        if (startY > endY) {
           bookmarks_direction = "down";
         } else
-          if (distanceY > 0) {
-            bookmarks_direction == "up";
+          if (startY < endY) {
+            bookmarks_direction = "up";
           };
       });
 
-      $(".bookmarks_content").mousewheel(function (event) {
+      $(bookmarks_content).mousewheel(function (event) {
         if (event.deltaY < 0) {
           bookmarks_direction = "down";
         } else
@@ -286,7 +284,7 @@
     }
 
     .search_bar {
-      padding: 50px 0 40px;
+      padding: 40px 0 40px;
       text-align: center;
       order: 1;
     }
