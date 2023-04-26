@@ -14,14 +14,14 @@
 
   <script>
 
-    var bookmarks, a;
+    var bookmarks, box;
 
     window.onload = function () {
       bookmarks = document.querySelector(".bookmarks");
-      a = document.querySelectorAll(".bookmarks a");
+      box = document.querySelectorAll(".box");
 
-      for (let i1 = 0; i1 < 16 - (a.length % 16); i1++) {
-        const box_create = document.createElement("a");
+      for (let i1 = 0; i1 < 16 - (box.length % 16); i1++) {
+        const box_create = document.createElement("div");
         box_create.className = "box";
         bookmarks.appendChild(box_create);
       };
@@ -37,10 +37,10 @@
       });
 
       function page_number() {
-        a = document.querySelectorAll(".bookmarks a");
+        box = document.querySelectorAll(".box");
         for (let i2 = 0; i2 < 2; i2++) {
           document.querySelectorAll(".table_edge .table_cell:nth-child(2)")[0 + i2].innerHTML =
-            Math.floor(bookmarks.scrollTop / bookmarks.clientHeight) + 1 + "/" + a.length / 16;
+            Math.floor(bookmarks.scrollTop / bookmarks.clientHeight) + 1 + "/" + box.length / 16;
         };
       }
       page_number();
@@ -61,12 +61,12 @@
     function Rotate() {
       current += 1;
       if (current % 2 == 0) {
-        for (var i3 = 0; i3 < a.length; i3++) {
+        for (var i3 = 0; i3 < box.length; i3++) {
           document.querySelectorAll(".bookmarks p")[0 + i3].style.removeProperty("writing-mode");
           document.querySelectorAll(".bookmarks p")[0 + i3].style.removeProperty("text-orientation");
         };
       } else {
-        for (var i3 = 0; i3 < a.length; i3++) {
+        for (var i3 = 0; i3 < box.length; i3++) {
           document.querySelectorAll(".bookmarks p")[0 + i3].style.setProperty("writing-mode", "vertical-rl");
           document.querySelectorAll(".bookmarks p")[0 + i3].style.setProperty("text-orientation", "sideways");
         };
@@ -154,6 +154,12 @@
 
     .box:active {
       border: 3px solid black;
+    }
+
+    .box:empty:active {
+      border-width: 0 1px 1px 0;
+      border-style: solid;
+      border-color: black;
     }
 
     .box a {
