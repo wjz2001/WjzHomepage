@@ -191,7 +191,14 @@
       }
 
       .body_blanks {
+        display: block;
         flex: 1;
+      }
+    }
+
+    @layer {
+      .body_blanks {
+        display: none;
       }
     }
 
