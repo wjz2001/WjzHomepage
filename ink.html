@@ -14,7 +14,7 @@
 
   <script>
 
-    var bookmarks, box;
+    var bookmarks, box, page_current, page_total;
 
     window.onload = function () {
       bookmarks = document.querySelector(".bookmarks");
@@ -37,39 +37,31 @@
       });
 
       function page_number() {
-        box = document.querySelectorAll(".box");
-        for (let i2 = 0; i2 < 2; i2++) {
-          document.querySelectorAll(".table_edge .table_cell:nth-child(2)")[0 + i2].innerHTML =
-            Math.floor(bookmarks.scrollTop / bookmarks.clientHeight) + 1 + "/" + box.length / 16;
-        };
-      }
+        page_current = Math.floor(bookmarks.scrollTop / bookmarks.clientHeight) + 1;
+        page_total = document.querySelectorAll(".box").length / 16;
+
+        document.querySelectorAll(".table_edge .table_cell:nth-child(2)")[0].innerHTML =
+          page_current + "/" + page_total;
+
+        document.documentElement.style.setProperty("--progress_bar", page_current / page_total * 100 + "%");
+      };
       page_number();
       document.querySelector("body").addEventListener("click", page_number);
     };
 
     function PgUp() {
-      bookmarks.scrollTop = bookmarks.scrollTop - bookmarks.clientHeight;
-    };
-
-    function PgDn() {
-      if (bookmarks.scrollTop + bookmarks.clientHeight + 1 < bookmarks.scrollHeight) {
-        bookmarks.scrollTop = bookmarks.scrollTop + bookmarks.clientHeight;
+      if (bookmarks.scrollTop == 0) {
+        bookmarks.scrollTop = bookmarks.scrollHeight;
+      } else {
+        bookmarks.scrollTop = bookmarks.scrollTop - bookmarks.clientHeight;
       };
     };
 
-    var current = 0;
-    function Rotate() {
-      current += 1;
-      if (current % 2 == 0) {
-        for (var i3 = 0; i3 < box.length; i3++) {
-          document.querySelectorAll(".bookmarks p")[0 + i3].style.removeProperty("writing-mode");
-          document.querySelectorAll(".bookmarks p")[0 + i3].style.removeProperty("text-orientation");
-        };
+    function PgDn() {
+      if (bookmarks.scrollTop + bookmarks.clientHeight + 1 >= bookmarks.scrollHeight) {
+        bookmarks.scrollTop = 0;
       } else {
-        for (var i3 = 0; i3 < box.length; i3++) {
-          document.querySelectorAll(".bookmarks p")[0 + i3].style.setProperty("writing-mode", "vertical-rl");
-          document.querySelectorAll(".bookmarks p")[0 + i3].style.setProperty("text-orientation", "sideways");
-        };
+        bookmarks.scrollTop = bookmarks.scrollTop + bookmarks.clientHeight + 1;
       };
     };
   </script>
@@ -93,6 +85,7 @@
       border-width: 1px 0 0 1px;
       border-style: solid;
       border-color: black;
+      box-sizing: border-box;
     }
 
     .page_main>div {
@@ -104,15 +97,16 @@
       grid-template-columns: repeat(3, 33.33%);
     }
 
-    .table_main {
-      flex: 1;
+    .table_edge:nth-child(3) .table_cell:nth-child(2) {
       overflow: hidden;
-      grid-template-columns: 30px auto 30px;
+      background: linear-gradient(to right, black var(--progress_bar), transparent calc(100% - var(--progress_bar)));
     }
 
-    .table_edge .table_cell:active,
-    .table_main .table_cell:not(:nth-child(2)):active {
-      border: 3px solid black;
+    .table_main {
+      flex: 1;
+      height: 0;
+      overflow: hidden;
+      grid-template-columns: 30px auto 30px;
     }
 
     .table_main .table_cell:nth-child(2) {
@@ -128,6 +122,11 @@
       box-sizing: border-box;
       display: grid;
       place-content: center;
+      user-select: none;
+    }
+
+    .table_cell:not(:nth-child(2)):active {
+      border: 3px solid black;
     }
 
     .bookmarks {
@@ -169,12 +168,10 @@
       text-decoration: none;
       display: grid;
       place-content: center;
-      padding: 20px;
-      box-sizing: border-box;
     }
 
     .box p {
-      word-break: break-all;
+      margin: 20px;
     }
   </style>
 </head>
@@ -184,7 +181,7 @@
 
     <div class="table_edge">
       <div class="table_cell" onclick="PgUp()">◀</div>
-      <div class="table_cell" onclick="Rotate()"></div>
+      <div class="table_cell"></div>
       <div class="table_cell" onclick="PgDn()">▶</div>
     </div>
 
@@ -308,7 +305,7 @@
 
     <div class="table_edge">
       <div class="table_cell" onclick="PgUp()">◀</div>
-      <div class="table_cell" onclick="Rotate()"></div>
+      <div class="table_cell"></div>
       <div class="table_cell" onclick="PgDn()">▶</div>
     </div>
 
