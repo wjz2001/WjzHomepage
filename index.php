@@ -15,6 +15,7 @@
 
   <script src="./js/jquery.min.js"></script>
   <script src="./js/jquery.mousewheel.min.js"></script>
+  <script src="./js/EventUtil.js"></script>
   <script src="./js/color-thief.umd.js"></script>
   <script src="./js/rgbtohex.js"></script>
 
@@ -36,7 +37,8 @@
     const img_array = JSON.parse('<?php echo $img_array_json ?>');
     const img = new Image();
     img.crossOrigin = "Anonymous";
-    img.src = img_array[Math.floor((Math.random() * img_array.length))];
+    img_number = Math.floor((Math.random() * img_array.length));
+    img.src = img_array[img_number];
     const colorThief = new ColorThief();
 
     img.addEventListener("load", function () {
@@ -142,12 +144,22 @@
       bgimg.addEventListener("mousedown", bgimg_event_start);
       bgimg.addEventListener("mouseup", bgimg_event_end);
 
-      for (let i4 = 0; i4 < 2; i4++) {
-        document.querySelectorAll(".body_blanks")[i4].addEventListener("touchstart", bgimg_event_start);
-        document.querySelectorAll(".body_blanks")[i4].addEventListener("touchend", bgimg_event_end);
-        document.querySelectorAll(".body_blanks")[i4].addEventListener("mousedown", bgimg_event_start);
-        document.querySelectorAll(".body_blanks")[i4].addEventListener("mouseup", bgimg_event_end);
-      }
+      function img_number_increase() {
+        img_number++;
+        img.src = img_array[img_number];
+      };
+
+      function img_number_decrease() {
+        img_number--;
+        img.src = img_array[img_number];
+      };
+
+      document.querySelectorAll(".body_blanks")[1].addEventListener("click", img_number_increase);
+      document.querySelectorAll(".body_blanks")[0].addEventListener("click", img_number_decrease);
+      EventUtil.bindEvent(document.querySelectorAll(".body_blanks")[1], "click", img_number_increase);
+      EventUtil.bindEvent(document.querySelectorAll(".body_blanks")[0], "click", img_number_decrease);
+      EventUtil.bindEvent(bgimg, "swipeleft", img_number_increase);
+      EventUtil.bindEvent(bgimg, "swiperight", img_number_decrease);
     };
   </script>
 
