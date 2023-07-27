@@ -144,20 +144,31 @@
       bgimg.addEventListener("mousedown", bgimg_event_start);
       bgimg.addEventListener("mouseup", bgimg_event_end);
 
+      var last_time = 0;
       function img_number_increase() {
-        img_number++;
-        img.src = img_array[img_number];
+        let now_time = new Date().valueOf();
+        if (now_time - last_time > 2000) {
+          img_number++;
+          img.src = img_array[img_number];
+          last_time = now_time;
+        };
       };
 
       function img_number_decrease() {
-        img_number--;
-        img.src = img_array[img_number];
+        let now_time = new Date().valueOf();
+        if (now_time - last_time > 2000) {
+          img_number--;
+          img.src = img_array[img_number];
+          last_time = now_time;
+        };
       };
 
       document.querySelectorAll(".body_blanks")[1].addEventListener("click", img_number_increase);
-      document.querySelectorAll(".body_blanks")[0].addEventListener("click", img_number_decrease);
       EventUtil.bindEvent(document.querySelectorAll(".body_blanks")[1], "click", img_number_increase);
+
+      document.querySelectorAll(".body_blanks")[0].addEventListener("click", img_number_decrease);
       EventUtil.bindEvent(document.querySelectorAll(".body_blanks")[0], "click", img_number_decrease);
+
       EventUtil.bindEvent(bgimg, "swipeleft", img_number_increase);
       EventUtil.bindEvent(bgimg, "swiperight", img_number_decrease);
     };
@@ -359,6 +370,7 @@
       content: "";
       position: absolute;
       inset: 0;
+      transition: all 3s;
       background: linear-gradient(transparent 50%, var(--background_color) 95%);
     }
 
