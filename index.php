@@ -75,11 +75,13 @@
         i2++;
       };
 
+      box_first = document.querySelectorAll(".box")[document.querySelectorAll(".box").length / 3];
+
       bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
 
       function bookmarks_scroll() {
-        if (bookmarks_content.scrollTop + bookmarks_content.clientHeight + 1 >= bookmarks_content.scrollHeight) {
-          bookmarks_content.scrollTop = bookmarks_content.scrollTop - bookmarks_content.scrollHeight / 3;
+        if (bookmarks_content.scrollTop == bookmarks_content.scrollHeight / 3 * 2) {
+          bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
         } else
           if (bookmarks_content.scrollTop === 0) {
             bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
@@ -88,7 +90,7 @@
       bookmarks_content.addEventListener("scroll", bookmarks_scroll);
       bookmarks_content.addEventListener("touchmove", bookmarks_scroll);
 
-      var bookmarks_direction, startY, endY;
+      var bookmarks_move, startY, endY;
       $(bookmarks_content).bind("touchstart", function (e) {
         startY = e.originalEvent.changedTouches[0].screenY;
       });
@@ -96,21 +98,15 @@
       $(bookmarks_content).bind("touchmove", function (e) {
         endY = e.originalEvent.changedTouches[0].screenY;
 
-        if (startY > endY) {
-          bookmarks_direction = "down";
-        } else
-          if (startY < endY) {
-            bookmarks_direction = "up";
-          };
+        if (startY != endY) {
+          bookmarks_move = "true";
+        };
       });
 
       $(bookmarks_content).mousewheel(function (event) {
-        if (event.deltaY < 0) {
-          bookmarks_direction = "down";
-        } else
-          if (event.deltaY > 0) {
-            bookmarks_direction = "up";
-          };
+        if (event.deltaY != 0) {
+          bookmarks_move = "true";
+        };
       });
 
       let timeOutEvent = 0;
@@ -119,12 +115,9 @@
 
         bookmarks_content.style.setProperty("scroll-behavior", "smooth");
 
-        if (bookmarks_direction == "down" && bookmarks_content.scrollTop % Math.floor(bookmarks_content.scrollHeight / 3) > 1) {
-          bookmarks_content.scrollTop = bookmarks_content.scrollTop - bookmarks_content.scrollTop % Math.floor(bookmarks_content.scrollHeight / 3);
-        } else
-          if (bookmarks_direction == "up" && bookmarks_content.scrollTop % Math.floor(bookmarks_content.scrollHeight / 3) > 1) {
-            bookmarks_content.scrollTop = bookmarks_content.scrollTop + bookmarks_content.scrollHeight / 3 - bookmarks_content.scrollTop % Math.floor(bookmarks_content.scrollHeight / 3);
-          };
+        if (bookmarks_move == "true") {
+          box_first.scrollIntoView();
+        };
 
         bookmarks_content.style.removeProperty("scroll-behavior");
       };
@@ -370,7 +363,6 @@
       content: "";
       position: absolute;
       inset: 0;
-      transition: all 3s;
       background: linear-gradient(transparent 50%, var(--background_color) 95%);
     }
 
