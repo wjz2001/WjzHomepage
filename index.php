@@ -80,7 +80,7 @@
       bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
 
       function bookmarks_scroll() {
-        if (bookmarks_content.scrollTop == bookmarks_content.scrollHeight / 3 * 2) {
+        if (bookmarks_content.scrollTop >= bookmarks_content.scrollHeight / 3 * 2) {
           bookmarks_content.scrollTop = bookmarks_content.scrollHeight / 3;
         } else
           if (bookmarks_content.scrollTop === 0) {
@@ -113,13 +113,12 @@
       function bookmarks_reset() {
         timeOutEvent = 0;
 
-        bookmarks_content.style.setProperty("scroll-behavior", "smooth");
-
         if (bookmarks_move == "true") {
-          box_first.scrollIntoView();
+          box_first.scrollIntoView({
+            behavior: "smooth"
+          });
         };
 
-        bookmarks_content.style.removeProperty("scroll-behavior");
       };
 
       function bgimg_event_start(e) {
