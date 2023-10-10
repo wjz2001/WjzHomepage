@@ -14,13 +14,14 @@
 
   <script>
 
-    var bookmarks, box, page_current, page_total;
+    var bookmarks, box, page_current, page_total, bookmarks_columns_number;
 
     window.onload = function () {
       bookmarks = document.querySelector(".bookmarks");
+      bookmarks_columns_number = window.getComputedStyle(bookmarks).getPropertyValue("grid-template-columns").split(" ").length;
       box = document.querySelectorAll(".box");
 
-      for (let i1 = 0; i1 < 16 - (box.length % 16); i1++) {
+      for (let i1 = 0; i1 < bookmarks_columns_number ** 2 - (box.length % bookmarks_columns_number ** 2); i1++) {
         const box_create = document.createElement("div");
         box_create.className = "box";
         bookmarks.appendChild(box_create);
@@ -38,10 +39,9 @@
 
       function page_number() {
         page_current = Math.floor(bookmarks.scrollTop / bookmarks.clientHeight) + 1;
-        page_total = document.querySelectorAll(".box").length / 16;
+        page_total = document.querySelectorAll(".box").length / bookmarks_columns_number ** 2;
 
-        document.querySelectorAll(".table_edge .table_cell:nth-child(2)")[0].innerHTML =
-          page_current + "/" + page_total;
+        document.querySelectorAll(".table_edge .table_cell:nth-child(2)")[0].textContent = page_current + "/" + page_total;
 
         document.documentElement.style.setProperty("--progress_bar", page_current / page_total * 100 + "%");
       };

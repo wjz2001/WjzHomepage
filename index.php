@@ -50,7 +50,7 @@
       document.querySelector(".bgimg img").src = img.src;
     });
 
-    var bgimg, bookmarks_content, box_all;
+    var bgimg, bookmarks_content, box_all, box_columns_number;
 
     window.onload = function () {
       document.querySelector(".page").style.setProperty("animation-play-state", "running");
@@ -58,9 +58,10 @@
 
       bgimg = document.querySelector(".bgimg");
       bookmarks_content = document.querySelector(".bookmarks_content");
+      bookmarks_content_columns_number = window.getComputedStyle(bookmarks_content).getPropertyValue("grid-template-columns").split(" ").length;
       box_all = document.querySelectorAll(".box");
 
-      for (let i1 = 0; i1 < 3 - (box_all.length % 3); i1++) {
+      for (let i1 = 0; i1 < bookmarks_content_columns_number - (box_all.length % bookmarks_content_columns_number); i1++) {
         const box_create = document.createElement("div");
         box_create.className = "box";
         bookmarks_content.appendChild(box_create);
