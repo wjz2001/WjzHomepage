@@ -14,14 +14,24 @@
 
   <script>
 
-    var bookmarks, box, page_current, page_total, bookmarks_columns_number;
+    var bookmarks, cssrules_number, csstext, bookmarks_columns_number, bookmarks_rows_number, box, page_current, page_total;
 
     window.onload = function () {
       bookmarks = document.querySelector(".bookmarks");
-      bookmarks_columns_number = window.getComputedStyle(bookmarks).getPropertyValue("grid-template-columns").split(" ").length;
+
+      for (let i = 0; i < document.styleSheets[0].rules.length; i++) {
+        if (document.styleSheets[0].rules[i].selectorText === ".bookmarks") {
+          cssrules_number = i;
+          break;
+        };
+      };
+
+      csstext = document.styleSheets[0].cssRules[cssrules_number].cssText;
+      bookmarks_columns_number = /grid-template-columns: repeat\((\d+), .+\);/.exec(csstext)[1];
+      bookmarks_rows_number = /grid-template-rows: repeat\((\d+), .+\);/.exec(csstext)[1];
       box = document.querySelectorAll(".box");
 
-      for (let i1 = 0; i1 < bookmarks_columns_number ** 2 - (box.length % bookmarks_columns_number ** 2); i1++) {
+      for (let i = 0; i < bookmarks_columns_number * bookmarks_rows_number - box.length % (bookmarks_columns_number * bookmarks_rows_number); i++) {
         const box_create = document.createElement("div");
         box_create.className = "box";
         bookmarks.appendChild(box_create);
@@ -39,7 +49,7 @@
 
       function page_number() {
         page_current = Math.floor(bookmarks.scrollTop / bookmarks.clientHeight) + 1;
-        page_total = document.querySelectorAll(".box").length / bookmarks_columns_number ** 2;
+        page_total = document.querySelectorAll(".box").length / (bookmarks_columns_number * bookmarks_rows_number);
 
         document.querySelectorAll(".table_edge .table_cell:nth-child(2)")[0].textContent = page_current + "/" + page_total;
 

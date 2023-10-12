@@ -50,7 +50,7 @@
       document.querySelector(".bgimg img").src = img.src;
     });
 
-    var bgimg, bookmarks_content, box_all, box_columns_number;
+    var bgimg, bookmarks_content, cssrules_number, bookmarks_content_columns_number, box_all;
 
     window.onload = function () {
       document.querySelector(".page").style.setProperty("animation-play-state", "running");
@@ -58,22 +58,30 @@
 
       bgimg = document.querySelector(".bgimg");
       bookmarks_content = document.querySelector(".bookmarks_content");
-      bookmarks_content_columns_number = window.getComputedStyle(bookmarks_content).getPropertyValue("grid-template-columns").split(" ").length;
+
+      for (let i = 0; i < document.styleSheets[0].rules.length; i++) {
+        if (document.styleSheets[0].rules[i].selectorText === ".bookmarks_content") {
+          cssrules_number = i;
+          break;
+        };
+      };
+
+      bookmarks_content_columns_number = /grid-template-columns: repeat\((\d+), .+\);/.exec(document.styleSheets[0].cssRules[cssrules_number].cssText)[1];
       box_all = document.querySelectorAll(".box");
 
-      for (let i1 = 0; i1 < bookmarks_content_columns_number - (box_all.length % bookmarks_content_columns_number); i1++) {
+      for (let i = 0; i < bookmarks_content_columns_number - (box_all.length % bookmarks_content_columns_number); i++) {
         const box_create = document.createElement("div");
         box_create.className = "box";
         bookmarks_content.appendChild(box_create);
       };
 
       box_all = document.querySelectorAll(".box");
-      let i2 = 0;
-      while (i2 < 2) {
-        for (let i3 = 0; i3 < box_all.length; i3++) {
-          bookmarks_content.appendChild(box_all[0 + i3].cloneNode(true));
+      let i = 0;
+      while (i < 2) {
+        for (let i = 0; i < box_all.length; i++) {
+          bookmarks_content.appendChild(box_all[0 + i].cloneNode(true));
         };
-        i2++;
+        i++;
       };
 
       box_first = document.querySelectorAll(".box")[document.querySelectorAll(".box").length / 3];
