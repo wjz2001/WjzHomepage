@@ -25,6 +25,7 @@
   ?>
 
   <script>
+    'use strict';
     function search() {
       const search_bar = document.querySelector(".search_bar input");
       if (search_bar.value != "") {
@@ -36,8 +37,8 @@
 
     const img_array = JSON.parse('<?php echo $img_array_json ?>');
     const img = new Image();
+    const img_number = Math.floor((Math.random() * img_array.length));
     img.crossOrigin = "Anonymous";
-    img_number = Math.floor((Math.random() * img_array.length));
     img.src = img_array[img_number];
     const colorThief = new ColorThief();
 
@@ -50,9 +51,9 @@
       document.querySelector(".bgimg img").src = img.src;
     });
 
-    var bgimg, bookmarks_content, cssrules_number, bookmarks_content_columns_number, box_all;
-
     window.onload = function () {
+      var bgimg, bookmarks_content, cssrules_number, bookmarks_content_columns_number, box_all, box_first, bookmarks_move, startY, endY, last_time;
+
       document.querySelector(".page").style.setProperty("animation-play-state", "running");
       $(".loading").fadeOut();
 
@@ -70,19 +71,18 @@
       box_all = document.querySelectorAll(".box");
 
       for (let i = 0; i < bookmarks_content_columns_number - (box_all.length % bookmarks_content_columns_number); i++) {
-        const box_create = document.createElement("div");
+        let box_create = document.createElement("div");
         box_create.className = "box";
         bookmarks_content.appendChild(box_create);
       };
 
       box_all = document.querySelectorAll(".box");
-      let i = 0;
-      while (i < 2) {
-        for (let i = 0; i < box_all.length; i++) {
-          bookmarks_content.appendChild(box_all[0 + i].cloneNode(true));
-        };
-        i++;
+      for (let i = 0; i < 2; i++) {
+        for (let i2 = 0; i2 < box_all.length; i2++) {
+          bookmarks_content.appendChild(box_all[i2].cloneNode(true));
+        }
       };
+
 
       box_first = document.querySelectorAll(".box")[document.querySelectorAll(".box").length / 3];
 
@@ -99,7 +99,6 @@
       bookmarks_content.addEventListener("scroll", bookmarks_scroll);
       bookmarks_content.addEventListener("touchmove", bookmarks_scroll);
 
-      var bookmarks_move, startY, endY;
       $(bookmarks_content).bind("touchstart", function (e) {
         startY = e.originalEvent.changedTouches[0].screenY;
       });
@@ -112,8 +111,8 @@
         };
       });
 
-      $(bookmarks_content).mousewheel(function (event) {
-        if (event.deltaY != 0) {
+      $(bookmarks_content).mousewheel(function (e) {
+        if (e.deltaY != 0) {
           bookmarks_move = "true";
         };
       });
@@ -122,7 +121,7 @@
       function bookmarks_reset() {
         timeOutEvent = 0;
 
-        if (bookmarks_move == "true") {
+        if (bookmarks_move === "true") {
           box_first.scrollIntoView({
             behavior: "smooth"
           });
@@ -145,7 +144,7 @@
       bgimg.addEventListener("mousedown", bgimg_event_start);
       bgimg.addEventListener("mouseup", bgimg_event_end);
 
-      var last_time = 0;
+      last_time = 0;
       function img_number_increase() {
         let now_time = new Date().valueOf();
         if (now_time - last_time > 2000) {
